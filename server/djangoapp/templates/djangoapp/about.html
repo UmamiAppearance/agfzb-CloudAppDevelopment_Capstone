@@ -1,6 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <h1>
-        Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.
-    </h1>
-</html>
+{% extends "djangoapp/base.html" %}
+
+{% block body %}
+
+    <div class="container-fluid bg-warning mt-5 pl-0">
+        <h1 class="d-block w-75 bg-dark text-white my-3 py-1 pr-5 pl-1" style="font-size: 1.6em; border-radius: 0 10vw 0 0; min-width: 400px;">
+            Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.
+        </h1>
+    </div>
+
+{% endblock %}
