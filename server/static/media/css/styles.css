@@ -1,0 +1,9 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-position: right bottom;
+    background-size: 30%;
+    background-image: url("/djangoapp/media/company/car-312278.svg");
+    background-repeat: no-repeat;
+}
