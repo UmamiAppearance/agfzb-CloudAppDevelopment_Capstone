@@ -1,9 +1,23 @@
-body {
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-position: right bottom;
-    background-size: 30%;
+body::after {
+    content: "";
+    position: fixed;
+    display: block;
+    height: 50%;
+    width: 50%;
+    right: 0;
+    bottom: 0;
     background-image: url("/djangoapp/media/company/car-312278.svg");
+    background-size: contain;
     background-repeat: no-repeat;
+    background-position: right bottom;
+    z-index: -1;
+}
+section {
+    margin: 0 0 2em 0;
+}
+section > p {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 0.5em;
+    margin: 0;
+    text-align: justify;
 }
