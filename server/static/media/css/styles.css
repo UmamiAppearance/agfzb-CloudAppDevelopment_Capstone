@@ -1,3 +1,9 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between; 
+}
 body::after {
     content: "";
     position: fixed;
@@ -20,4 +26,23 @@ section > p {
     padding: 0.5em;
     margin: 0;
     text-align: justify;
+}
+main {
+    display: flex;
+    flex-direction: column;
+}
+footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+footer > div {
+    padding: 1em 0;
+}
+footer a {
+    color: #fff;
+    text-decoration: underline;
+}
+footer a:hover {
+    color: #eee;
 }
