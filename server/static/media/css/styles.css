@@ -26,6 +26,18 @@ section > p {
     padding: 0.5em;
     margin: 0;
     text-align: justify;
+    font-size: 1.2em;
+}
+table {
+    font-size: 1.3em;
+    text-shadow: 0 0 6px #fff;
+}
+table p {
+    margin: 0.1em;
+}
+table strong {
+    font-weight: 500;
+    font-size: 110%;
 }
 main {
     display: flex;
