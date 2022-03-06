@@ -46,9 +46,10 @@
                 </form>
             {% else %}
                 <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-                    <input name="username" class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username">
-                    <input name="psw" class="form-control mr-sm-2" type="text" placeholder="Password" aria-label="Password">
-                    <button class="btn btn-light my-2 my-sm-0 mr-sm-2" type="submit" value="login">Login</button>
+                    {% csrf_token %}
+                    <input name="username" class="form-control mr-sm-2{% if error %} is-invalid{% endif %}" type="text" placeholder="Username" aria-label="Username" value="{{ username }}" required>
+                    <input name="psw" class="form-control mr-sm-2{% if error %} is-invalid{% endif %}" type="password" placeholder="Password" aria-label="Password" value="{{ password }}" required>
+                    <button id="loginSubmit" class="btn btn-light my-2 my-sm-0 mr-sm-2" type="submit" value="login">Login</button>
                 </form>
                 <form class="form-inline" action="{% url 'djangoapp:register' %}">
                     <button class="btn btn-outline-light my-2 my-sm-0" type="submit" value="register">Sign Up</button>
@@ -76,6 +77,25 @@
                 <a href="{% url 'djangoapp:contact' %}">contact</a>
             </div>
         </footer>
+
+        {% if error %}
+            <script>
+                const username = document.querySelector('input[name="username"]');
+                const password = document.querySelector('input[name="psw"]');
+                
+                const clearWarning = () => {
+                    username.setCustomValidity('');
+                    username.classList.remove("is-invalid");
+                    password.classList.remove("is-invalid");
+                }
+                
+                username.setCustomValidity('Invalid username/password');
+                setTimeout(() => username.form.reportValidity(), 500);
+
+                username.addEventListener('input', clearWarning, false);
+                password.addEventListener('input', clearWarning, false);
+            </script>
+        {% endif %}
 
     </body>
 

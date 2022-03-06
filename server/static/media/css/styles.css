@@ -58,3 +58,6 @@ footer a {
 footer a:hover {
     color: #eee;
 }
+form-inline input:not(.is-invalid), .form-inline input:not(.is-valid) {
+    padding-right: calc(1.5em + 0.75rem);
+}

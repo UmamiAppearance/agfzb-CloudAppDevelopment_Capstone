@@ -29,19 +29,20 @@ def contact(request):
 
 # Create a `login_request` view to handle sign in request
 def login_request(request):
-    context = {}
+    context = {
+        "error": False 
+    }
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['psw']
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('djangoapp:index')
         else:
-            # If not, return to login page again
-            return render(request, 'djangoapp/login', context)
-    else:
-        return render(request, 'djangoapp/index', context)
+            context["error"] = True
+            context["username"] = username
+            context["password"] = password
+    return render(request, 'djangoapp/index.html', context)
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
