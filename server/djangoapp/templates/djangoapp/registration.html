@@ -4,8 +4,41 @@
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/media/css/styles.css"> 
+    <title>Product Review - Sign up</title>
 </head>
     <body>
-    <!--Add a registration form here -->
+        <header class="container-fluid bg-warning pl-0">
+            <h1 class="d-block w-75 bg-dark text-white m-0 py-1 pr-5 pl-1" style="font-size: 1.6em; border-radius: 0 10vw 0 0;">
+                Create your account
+            </h1>
+        </header>
+
+        <main class="mb-5">
+
+            <section class="container-sm border p-3 rounded-lg mt-3" style="max-width: 400px; border-color:#888;">
+                <form action="{% url 'djangoapp:sign_up' %}" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <hr>
+                    <input class="btn btn-dark" type="submit" value="Sign up">
+                </form>
+            </section>
+
+        </main>
+
+        <footer class="bg-dark text-light">
+            <div>
+                <!-- TODO -->
+            </div>
+            <div class="">
+                &copy; {% now 'Y' %} Copyright: <a href="{% url 'djangoapp:index' %}">Dealership Review</a>
+            </div>
+            <div class="mr-2">
+                <a href="#">contact</a>
+            </div>
+        </footer>
+
+
     </body>
 </html>

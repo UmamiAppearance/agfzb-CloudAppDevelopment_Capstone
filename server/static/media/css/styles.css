@@ -61,3 +61,20 @@ footer a:hover {
 form-inline input:not(.is-invalid), .form-inline input:not(.is-valid) {
     padding-right: calc(1.5em + 0.75rem);
 }
+.error input {
+    border: 2px solid #000;
+    background-color: rgba(231, 128, 128, 0.1);
+}
+ul.errorlist {
+    background-color: rgba(231, 128, 128, 0.1);
+    display: block;
+    padding: 0.3em;
+    border: 2px dashed #000;
+}
+ul.errorlist li {
+    list-style-type: none;
+    margin: 0;
+}
+ul.errorlist li::before {
+    content: "Validation Error: "
+}

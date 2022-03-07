@@ -85,12 +85,14 @@
                 
                 const clearWarning = () => {
                     username.setCustomValidity('');
+                    password.setCustomValidity('');
                     username.classList.remove("is-invalid");
                     password.classList.remove("is-invalid");
                 }
                 
                 username.setCustomValidity('Invalid username/password');
-                setTimeout(() => username.form.reportValidity(), 500);
+                password.setCustomValidity('Invalid username/password');
+                username.form.reportValidity();
 
                 username.addEventListener('input', clearWarning, false);
                 password.addEventListener('input', clearWarning, false);
