@@ -1,17 +1,19 @@
 const Cloudant = require('@cloudant/cloudant');
 
-function compileResponse(msg, statusCode=400) {
+function compileResponse(msg, statusCode=200) {
     const response = {
         headers: { 
             "Content-Type": "application/json"  
         }, 
         statusCode: String(statusCode)
     }
-    if (statusCode !== 400) {
+
+    if (statusCode !== 200) {
         response.body = { error: msg };
     } else {
-        response.body = msg;
+        response.body = { data: msg };
     }
+
     return response;
 }
 
@@ -24,10 +26,13 @@ async function main(params) {
             }
         }
     });
+
     const dealerships_db = cloudant.db.use("dealerships")
+    
     let query;
     const fields = ["id", "city", "state", "st", "address", "zip", "lat", "long"];
     const stateFilter = params.hasOwnProperty("state");
+    
     if (stateFilter) {
         query = {
             selector: {
@@ -41,9 +46,10 @@ async function main(params) {
             fields: fields
         };
     }
+    
     let dealershipsList;
     if (stateFilter && !params.state) {
-        dealershipsList = { docs: [] };
+        dealershipsList = { bookmark: "nil" };
     } else {
         try {
             dealershipsList = await dealerships_db.find(query);
@@ -51,12 +57,14 @@ async function main(params) {
             return compileResponse(error.description, 500);
         }
     }
+    
     let response;
-    if (dealershipsList.docs.length) {
-        response = compileResponse(dealershipsList.docs);
+    if (dealershipsList.bookmark !== "nil") {
+        response = compileResponse(dealershipsList);
     } else {
         const message = (stateFilter) ? "The state does not exist" :  "The database is empty";
         response = compileResponse(message, 404);
     }
+    
     return response;
 }
