@@ -8,9 +8,9 @@ function compileResponse(msg, statusCode=400) {
         statusCode: String(statusCode)
     }
     if (statusCode !== 400) {
-        response.data = { error: msg };
+        response.body = { error: msg };
     } else {
-        response.data = msg;
+        response.body = msg;
     }
     return response;
 }
