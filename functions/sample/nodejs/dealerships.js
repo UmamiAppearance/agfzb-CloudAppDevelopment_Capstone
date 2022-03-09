@@ -30,13 +30,21 @@ async function main(params) {
     const dealerships_db = cloudant.db.use("dealerships")
     
     let query;
-    const fields = ["id", "city", "state", "st", "address", "zip", "lat", "long"];
+    const fields = ["id", "city", "state", "st", "address", "zip", "lat", "long", "short_name", "full_name"];
     const stateFilter = params.hasOwnProperty("state");
+    const getID = params.hasOwnProperty("dealerId");
     
     if (stateFilter) {
         query = {
             selector: {
                 st: {"$eq": params.state },
+            },
+            fields: fields
+        };
+    } else if (getID) {
+        query = {
+            selector: {
+                id: {"$eq": parseInt(params.dealerId, 10) },
             },
             fields: fields
         };
@@ -48,7 +56,7 @@ async function main(params) {
     }
     
     let dealershipsList;
-    if (stateFilter && !params.state) {
+    if ((stateFilter && !params.state) || (getID && !params.dealerId)) {
         dealershipsList = { bookmark: "nil" };
     } else {
         try {
@@ -62,7 +70,14 @@ async function main(params) {
     if (dealershipsList.bookmark !== "nil") {
         response = compileResponse(dealershipsList);
     } else {
-        const message = (stateFilter) ? "The state does not exist" :  "The database is empty";
+        let message;
+        if (stateFilter) {
+            message ="The state does not exist";
+        } else if (getID) {
+            message ="No match found for the given id";
+        } else {
+            message = "The database is empty";
+        }
         response = compileResponse(message, 404);
     }
     
