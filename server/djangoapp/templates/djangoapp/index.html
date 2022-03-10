@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Dealership Review</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/media/css/styles.css"> 
+        <link rel="stylesheet" href="{{ MEDIA_URL }}/css/styles.css"> 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -19,7 +19,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Dealership Review</a>
+                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Review</a>
             </div>
             
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,24 +62,32 @@
 
         <main class="container">
 
-            <table class="table table-hover">
+            <table class="table table-hover" id="table" data-filter-control="true">
                 
                 <caption style="caption-side: top;">Car Dealers</caption>
                 
                 <thead>
                     <tr>
+                        <th data-field="id">ID</th>
                         <th>Dealer</th>
-                        <th>State</th>
                         <th>City</th>
+                        <th>Address</th>
+                        <th>Zip</>
+                        <th data-field="state" data-filter-control="select">State</th>
                     </tr>
                 </thead>
                 
                 <tbody>
                     {% for dealer in dealerships %}
                         <tr>
-                            <td>{{ dealer.full_name }}</td>
-                            <td>{{ dealer.st }}</td>
+                            <td>{{ dealer.id }}</td>
+                            <td>
+                                <a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{ dealer.full_name }}</a>
+                            </td>
                             <td>{{ dealer.city }}</td>
+                            <td>{{ dealer.address }}</td>
+                            <td>{{ dealer.zip }}</td>
+                            <td>{{ dealer.st }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -120,6 +128,12 @@
                 password.addEventListener('input', clearWarning, false);
             </script>
         {% endif %}
+
+        <script>
+            $(function() {
+                $('#table').bootstrapTable()
+            })
+        </script>
 
     </body>
 

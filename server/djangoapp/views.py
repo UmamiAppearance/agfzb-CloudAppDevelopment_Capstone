@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
@@ -21,7 +22,7 @@ REVIEWS_API_URL = 'https://ffc4210a.us-south.apigw.appdomain.cloud/api/review'
 class RegistrationForm(forms.Form):
     '''Form class for user registration'''
 
-    error_css_class = "error"
+    error_css_class = 'error'
     
     username = forms.CharField(
         max_length = 30,
@@ -30,7 +31,7 @@ class RegistrationForm(forms.Form):
         widget = forms.TextInput(
             attrs = {
                 'placeholder': 'Enter User Name:',
-                'class': "form-control",
+                'class': 'form-control',
             },
         ),
     )
@@ -41,7 +42,7 @@ class RegistrationForm(forms.Form):
         widget = forms.TextInput(
             attrs = {
                 'placeholder': 'Enter First Name:',
-                'class': "form-control",
+                'class': 'form-control',
             },
         ),
     )
@@ -52,7 +53,7 @@ class RegistrationForm(forms.Form):
         widget = forms.TextInput(
             attrs = {
                 'placeholder': 'Enter Last Name:',
-                'class': "form-control",
+                'class': 'form-control',
             },
         ),
     )
@@ -63,10 +64,12 @@ class RegistrationForm(forms.Form):
         widget = forms.PasswordInput(
             attrs = {
                 'placeholder': 'Enter Password:',
-                'class': "form-control",
+                'class': 'form-control',
             },
         ),
     )
+
+
 
 # Create your views here.
 
@@ -85,18 +88,19 @@ def contact(request):
 # Create a `login_request` view to handle sign in request
 def login_request(request):
     context = {
-        "error": False 
+        'error': False 
     }
-    if request.method == "POST":
+    if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['psw']
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
         else:
-            context["error"] = True
-            context["username"] = username
-            context["password"] = password
+            context['error'] = True
+            context['username'] = username
+            context['password'] = password
+            context['dealerships'] = get_dealers_from_cf(DEALERSHIPS_API_URL)
     return render(request, 'djangoapp/index.html', context)
 
 
@@ -117,7 +121,7 @@ def registration_request(request):
 
 # Sign up view
 def sign_up_request(request):
-    if request.method != "POST":
+    if request.method != 'POST':
         return redirect('djangoapp:register')
 
     registration_form = RegistrationForm(request.POST)
@@ -135,7 +139,7 @@ def sign_up_request(request):
             user_exist = True
         except:
             # If not, simply log this is a new user
-            logger.debug("{} is new user".format(form_data['username']))
+            logger.debug('{} is new user'.format(form_data['username']))
         
         # If it is a new user
         if not user_exist:
@@ -154,7 +158,7 @@ def sign_up_request(request):
         else:
         
             # Add error message to the form
-            registration_form.add_error("username", "The user already exists.")
+            registration_form.add_error('username', 'The user already exists.')
     context = {
         'form': registration_form
     }
@@ -163,29 +167,20 @@ def sign_up_request(request):
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
-    if request.method == "GET":
-
-        url = DEALERSHIPS_API_URL
-        
-        # Get dealers from the URL
-        dealerships = get_dealers_from_cf(url)
-
-        # Pass list to template
+    if request.method == 'GET':
         context = {
-            'dealerships': dealerships,
+            'dealerships': get_dealers_from_cf(DEALERSHIPS_API_URL),
         }
-
         return render(request, 'djangoapp/index.html', context)
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
-    if request.method == "GET":
-        url = REVIEWS_API_URL
+    if request.method == 'GET':
+        context = dict()
         # Get reviews from url
-        reviews = get_dealer_reviews_from_cf(url, dealer_id)
-        reviews_list = ' '.join([review.sentiment for review in reviews])
-        return HttpResponse(reviews_list)
+        context["reviews"] = get_dealer_reviews_from_cf(REVIEWS_API_URL, dealer_id)
+        return render(request, 'djangoapp/dealer_details.html', context)
 
 
 # Create a `add_review` view to submit a review
@@ -193,17 +188,17 @@ def add_review(request, dealer_id):
     if request.user.is_authenticated:
         # time, name, dealership, review, purchase
         review = dict()
-        review["time"] = datetime.utcnow().isoformat()
-        review["dealership"] = dealer_id
-        review["review"] = "This is a great car dealer"
+        review['time'] = datetime.utcnow().isoformat()
+        review['dealership'] = dealer_id
+        review['review'] = 'This is a great car dealer'
 
         json_payload = dict()
-        json_payload["review"] = review
+        json_payload['review'] = review
 
         response = post_request(REVIEWS_API_URL, json_payload)
         
         return HttpResponse(response)
 
     else:
-        print("User is not logged in")
+        print('User is not logged in')
 
