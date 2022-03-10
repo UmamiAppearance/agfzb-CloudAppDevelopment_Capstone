@@ -63,16 +63,16 @@ def get_dealers_from_cf(url, **kwargs):
         # For each dealer object
         for dealer_doc in dealers:
             # Create a CarDealer object with values in `doc` object
-            dealer_obj = CarDealer(address=dealer_doc['address'],
-                                   city=dealer_doc['city'],
-                                   full_name=dealer_doc['full_name'],
-                                   id=dealer_doc['id'],
-                                   lat=dealer_doc['lat'],
-                                   long=dealer_doc['long'],
-                                   short_name=dealer_doc['short_name'],
-                                   st=dealer_doc['st'],
-                                   state=dealer_doc['state'],
-                                   zip=dealer_doc['zip'])
+            dealer_obj = CarDealer(address=dealer_doc.get('address'),
+                                   city=dealer_doc.get('city'),
+                                   full_name=dealer_doc.get('full_name'),
+                                   id=dealer_doc.get('id'),
+                                   lat=dealer_doc.get('lat'),
+                                   long=dealer_doc.get('long'),
+                                   short_name=dealer_doc.get('short_name'),
+                                   st=dealer_doc.get('st'),
+                                   state=dealer_doc.get('state'),
+                                   zip=dealer_doc.get('zip'))
             results.append(dealer_obj)
     return results
 
@@ -105,14 +105,15 @@ def get_dealer_reviews_from_cf(url, dealerId):
             else:
                 sentiment = ''
 
-            review_obj = DealerReview(car_make=review_doc['car_make'],
-                                      car_model=review_doc['car_model'],
-                                      car_year=review_doc['car_year'],
-                                      dealership=review_doc['dealership'],
-                                      id=review_doc['id'],
-                                      name=review_doc['name'],
-                                      purchase=review_doc['purchase'],
-                                      purchase_date=review_doc['purchase_date'],
+            review_obj = DealerReview(car_make=review_doc.get('car_make'),
+                                      car_model=review_doc.get('car_model'),
+                                      car_year=review_doc.get('car_year'),
+                                      dealership=review_doc.get('dealership'),
+                                      id=review_doc.get('id'),
+                                      name=review_doc.get('name'),
+                                      purchase=review_doc.get('purchase'),
+                                      purchase_date=review_doc.get('purchase_date'),
+                                      review=review_doc.get('review'),
                                       sentiment=sentiment)
             results.append(review_obj)
     return results

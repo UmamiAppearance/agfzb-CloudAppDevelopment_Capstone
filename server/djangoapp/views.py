@@ -94,13 +94,15 @@ def login_request(request):
         username = request.POST['username']
         password = request.POST['psw']
         user = authenticate(username=username, password=password)
+
+        context['dealerships'] = get_dealers_from_cf(DEALERSHIPS_API_URL)
+        
         if user is not None:
             login(request, user)
         else:
             context['error'] = True
             context['username'] = username
             context['password'] = password
-            context['dealerships'] = get_dealers_from_cf(DEALERSHIPS_API_URL)
     return render(request, 'djangoapp/index.html', context)
 
 
