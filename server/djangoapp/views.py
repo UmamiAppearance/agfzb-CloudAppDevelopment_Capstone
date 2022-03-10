@@ -15,6 +15,7 @@ import json
 logger = logging.getLogger(__name__)
 
 DEALERSHIPS_API_URL = 'https://ffc4210a.us-south.apigw.appdomain.cloud/api/dealership'
+REVIEWS_API_URL = 'https://ffc4210a.us-south.apigw.appdomain.cloud/api/review'
 
 # registration form
 class RegistrationForm(forms.Form):
@@ -69,16 +70,17 @@ class RegistrationForm(forms.Form):
 
 # Create your views here.
 
-
 # Create an `about` view to render a static about page
 def about(request):
     context = {}
     return render(request, 'djangoapp/about.html', context)
 
+
 # Create a `contact` view to return a static contact page
 def contact(request):
     context = {}
     return render(request, 'djangoapp/contact.html', context)
+
 
 # Create a `login_request` view to handle sign in request
 def login_request(request):
@@ -97,6 +99,7 @@ def login_request(request):
             context["password"] = password
     return render(request, 'djangoapp/index.html', context)
 
+
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
     logout(request)
@@ -110,6 +113,7 @@ def registration_request(request):
         'form': registration_form
     }
     return render(request, 'djangoapp/registration.html', context)
+
 
 # Sign up view
 def sign_up_request(request):
@@ -148,7 +152,7 @@ def sign_up_request(request):
             login(request, user)    
             return redirect('djangoapp:index')
         else:
-            
+        
             # Add error message to the form
             registration_form.add_error("username", "The user already exists.")
     context = {
@@ -160,22 +164,46 @@ def sign_up_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
+
         url = DEALERSHIPS_API_URL
+        
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
+
+        # Pass list to template
         context = {
-            'dealer_names': dealer_names,
+            'dealerships': dealerships,
         }
+
         return render(request, 'djangoapp/index.html', context)
 
+
 # Create a `get_dealer_details` view to render the reviews of a dealer
-# def get_dealer_details(request, dealer_id):
-# ...
+def get_dealer_details(request, dealer_id):
+    if request.method == "GET":
+        url = REVIEWS_API_URL
+        # Get reviews from url
+        reviews = get_dealer_reviews_from_cf(url, dealer_id)
+        reviews_list = ' '.join([review.sentiment for review in reviews])
+        return HttpResponse(reviews_list)
+
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    if request.user.is_authenticated:
+        # time, name, dealership, review, purchase
+        review = dict()
+        review["time"] = datetime.utcnow().isoformat()
+        review["dealership"] = dealer_id
+        review["review"] = "This is a great car dealer"
+
+        json_payload = dict()
+        json_payload["review"] = review
+
+        response = post_request(REVIEWS_API_URL, json_payload)
+        
+        return HttpResponse(response)
+
+    else:
+        print("User is not logged in")
 
