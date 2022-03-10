@@ -13,7 +13,7 @@ class CarMake(models.Model):
     founded = models.DateField()
     headquarters = models.CharField(max_length=48)
     products = models.CharField(max_length=48)
-    parent = models.CharField(max_length=48)
+    parent = models.CharField(max_length=48, blank=True, null=True)
 
     def __str__(self):
         return f'#{self.id}: {self.name}'
@@ -38,8 +38,8 @@ class CarModel(models.Model):
     )
     type = models.CharField(blank=True, choices=TYPES, max_length=11)
     year = models.IntegerField()
-    fuel_consumption = models.IntegerField()
-    efficiency_class = models.CharField(max_length=24)
+    fuel_consumption = models.IntegerField(blank=True, default=0)
+    efficiency_class = models.CharField(max_length=24, blank=True, null=True)
 
     def __str__(self):
         return f'#{self.id}: {self.name}, type: {self.type}'
@@ -72,4 +72,28 @@ class CarDealer:
         def __str__(self):
             return f'Dealer name: {self.full_name}'
 
-# <HINT> Create a plain Python class `DealerReview` to hold review data
+
+# Create a plain Python class `DealerReview` to hold review data
+class DealerReview:
+    def __init__(self, car_make, car_model, car_year, dealership, id, name, purchase, purchase_date, sentiment):
+        # Car make
+        self.car_make = car_make
+        # Car model
+        self.car_model = car_model
+        # Car year
+        self.car_year = car_year
+        # Dealership
+        self.dealership = dealership
+        # Review id
+        self.id = id
+        # Revier name
+        self.name = name
+        # Purchase
+        self.purchase = purchase
+        # Purchase date
+        self.purchase_date = purchase_date
+        # Sentiment 
+        self.sentiment = sentiment
+
+        def __str__(self):
+            return f'Review from {self.name} for {self.dealership}'

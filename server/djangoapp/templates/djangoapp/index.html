@@ -60,9 +60,31 @@
             
         </nav>
 
-        <main>
+        <main class="container">
 
-            {{ dealer_names }}
+            <table class="table table-hover">
+                
+                <caption style="caption-side: top;">Car Dealers</caption>
+                
+                <thead>
+                    <tr>
+                        <th>Dealer</th>
+                        <th>State</th>
+                        <th>City</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for dealer in dealerships %}
+                        <tr>
+                            <td>{{ dealer.full_name }}</td>
+                            <td>{{ dealer.st }}</td>
+                            <td>{{ dealer.city }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            
+            </table>
 
         </main>
 
