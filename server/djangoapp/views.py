@@ -3,11 +3,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from django.urls import reverse
+from .models import CarModel
 from .restapis import *
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
 import logging
 import json
@@ -181,6 +183,7 @@ def get_dealer_details(request, dealer_id):
     if request.method == 'GET':
         context = dict()
         # Get reviews from url
+        context['dealer_id'] = dealer_id
         context["reviews"] = get_dealer_reviews_from_cf(REVIEWS_API_URL, dealer_id)
         return render(request, 'djangoapp/dealer_details.html', context)
 
@@ -188,19 +191,45 @@ def get_dealer_details(request, dealer_id):
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
     if request.user.is_authenticated:
-        # time, name, dealership, review, purchase
-        review = dict()
-        review['time'] = datetime.utcnow().isoformat()
-        review['dealership'] = dealer_id
-        review['review'] = 'This is a great car dealer'
+        if request.method == 'GET':
+            cars = CarModel.objects.all()
+            dealer = get_dealer_by_id(DEALERSHIPS_API_URL, dealer_id)
+            context = {
+                'cars': cars,
+                'dealer': dealer
+            }
+            return render(request, 'djangoapp/add_review.html', context)
 
-        json_payload = dict()
-        json_payload['review'] = review
+            
+        elif request.method == 'POST': 
+            review = dict()
+            review['time'] = datetime.utcnow().isoformat()
+            review['name'] = request.user.get_full_name()
+            review['dealership'] = dealer_id
+            review['review'] = request.POST.get("content", "I have got nothing to say...")
+            review['purchase'] = bool(request.POST.get("purchasecheck", False));
 
-        response = post_request(REVIEWS_API_URL, json_payload)
-        
-        return HttpResponse(response)
+            car_id = request.POST.get("car", None)
 
-    else:
-        print('User is not logged in')
+            if car_id is not None:
+                try:
+                    car = CarModel.objects.get(id=car_id)
+                except ObjectDoesNotExist:
+                    car = None
+
+                if car is not None:
+                    review['car_make'] = car.car_make.name
+                    review['car_model'] = car.name
+                    review['car_year'] = car.year
+
+            json_payload = dict()
+            json_payload['review'] = review
+
+            response = post_request(REVIEWS_API_URL, json_payload)
+            
+            print(response)
+
+            return redirect(reverse('dealer_details', args=[dealer_id]))
+
+    return redirect('djangoapp:index')
 

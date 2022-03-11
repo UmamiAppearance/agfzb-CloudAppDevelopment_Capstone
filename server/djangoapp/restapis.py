@@ -79,7 +79,7 @@ def get_dealers_from_cf(url, **kwargs):
 
 # get_dealer_by_id
 def get_dealer_by_id(url, dealerId):
-    return get_dealers_from_cf(url, dealerId=dealerId)
+    return get_dealers_from_cf(url, dealerId=dealerId)[0]
 
 
 #get_dealers_by_state

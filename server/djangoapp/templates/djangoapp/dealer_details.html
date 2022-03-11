@@ -69,10 +69,10 @@
             <!-- Add reviews as cards -->
             <div class="card-columns">
                 {% if user.is_authenticated %}
-                    <a id="add-review" class="card text-right" href="#" title="Add review">
-                        <img width="32px" height="32px" class="card-img-left float-left m-1" src="{{ MEDIA_URL }}/icons/add-outline.svg">
+                    <a id="add-review" class="card" href="{% url 'djangoapp:add_review' dealer_id %}" title="Add review">
+                        <img width="32px" height="32px" class="card-img-left position-absolute m-1" src="{{ MEDIA_URL }}/icons/add-outline.svg">
                         <div class="card-header p-0">
-                            <h5 class="card-title m-0 p-2">Write a review</h5>
+                            <h5 class="card-title m-0 p-2 text-right">Write a review</h5>
                         </div>
                         <div class="card-body">
                             <p class="card-title">Share your opinion...</p>
@@ -81,20 +81,20 @@
                 {% endif %}
                 {% for review in reviews %}
                     <div class="card">
-                        <img width="32px" height="32px" class="card-img-left float-left m-1" src="{{ MEDIA_URL }}/emoji/{{ review.sentiment }}.png" alt="{{ review.sentiment }} review">
+                        <img width="32px" height="32px" class="card-img-left position-absolute m-1" src="{{ MEDIA_URL }}/emoji/{{ review.sentiment }}.png" alt="{{ review.sentiment }} review">
                         <div class="card-header p-0">
                             <h5 class="card-title m-0 p-2 text-right">{{ review.car_make }}, {{ review.car_model }}</h5>
                         </div>
                         <div class="card-body">
-                            <i class="card-title">{{ review.purchase_date|slice:'-4:' }}</i>
+                            <strong class="card-title">{{ review.purchase_date|slice:'-4:' }}</strong>
                             <p class="card-title">{{ review.review }}</p>
                         </div>
                     </div>
                 {% empty %}
-                    <div class="card text-right">
-                        <img width="32px" height="32px" class="card-img-left float-left m-1" src="{{ MEDIA_URL }}/icons/information-outline.svg">
+                    <div class="card">
+                        <img width="32px" height="32px" class="card-img-left position-absolute m-1" src="{{ MEDIA_URL }}/icons/information-outline.svg">
                         <div class="card-header p-0">
-                            <h5 class="card-title m-0 p-2">No reviews found.</h5>
+                            <h5 class="card-title m-0 p-2 text-right">No reviews found.</h5>
                         </div>
                         <div class="card-body">
                             <p id="review-elem2" class="card-title">This dealer has no reviews yet.</p>

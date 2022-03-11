@@ -13,6 +13,74 @@
 
 </head>
     <body>
-    <!--Add review form here -->
+
+        <header class="container-fluid bg-warning pl-0">
+            <h1 class="d-block w-75 bg-dark text-white m-0 py-1 pr-5 pl-1" style="font-size: 1.6em; border-radius: 0 10vw 0 0;">
+                Add a review about <strong>{{ dealer.full_name }} Dealership</strong>
+            </h1>
+        </header>
+
+        <main>
+            <!--Add review form here -->
+            <section class="container-sm border p-3 rounded-lg mt-3 lead" style="max-width: 640px; border-color:#888;">
+                
+                <form method="post">
+                    
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="content">Enter the review content:</label>
+                        <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+                    </div>
+
+                    <div class="form-group" style="display: inline-flex; width: 100%; justify-content: space-between;">
+                        <label class="m-0" for="purchasecheck">Has purchased the car from {{ dealer.full_name }} Dealership?</label>
+                        <input class="form-control form-control-sm form-check-input my-auto mx-0 position-static" style="height: 2em; width: 2em; min-height: 2em; min-width: 2em;" type="checkbox" name="purchasecheck" id="purchasecheck">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="car">Select your car (model-make-year): </label>
+                        <select name="car" id="car" class="form-control form-select" required>
+                            {% for car in cars %}
+                                <option selected value={{car.id}}>{{car.name}}-{{car.car_make.name}}-{{ car.year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="purchasedate">Select your Purchase Date:</label>
+                        <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
+                    </div>
+                    
+                    <hr>
+
+                    <button class="btn btn-dark" type="submit">Publish</button>
+                    <button id="back" class="btn btn-outline-dark" type="button">Go back!</button>
+
+
+                </form>
+
+            </section>
+        </main>
+
+        <footer class="bg-dark text-light">
+            <div>
+                <!-- TODO -->
+            </div>
+            <div class="">
+                &copy; {% now 'Y' %} Copyright: <a href="{% url 'djangoapp:index' %}">Dealership Review</a>
+            </div>
+            <div class="mr-2">
+                <a href="#">contact</a>
+            </div>
+        </footer>
+    
+        <script type="text/javascript">
+            $('.date-own').datepicker({
+                format: 'mm/dd/yyyy'
+            });
+
+            document.querySelector("#back").addEventListener("click", ()=>{window.history.back();});
+        </script>
     </body>
 </html>
