@@ -21,7 +21,6 @@ NLU_API_KEY = 'ZIC1bWqSG8J_C3sr3ma1CDB5SSeNKxVu0CeB5nQuvEIv'
 #                                     auth=HTTPBasicAuth('apikey', api_key))
 
 def get_request(url, **kwargs):
-    print(kwargs)
     print('GET from {} '.format(url))
     try:
         # Call get method of requests library with URL and parameters

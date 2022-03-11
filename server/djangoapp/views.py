@@ -181,9 +181,13 @@ def get_dealerships(request):
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
     if request.method == 'GET':
+
+        dealer = get_dealer_by_id(DEALERSHIPS_API_URL, dealer_id)
         context = dict()
+
         # Get reviews from url
         context['dealer_id'] = dealer_id
+        context['dealer_name'] = f'Reviews for {dealer.full_name} ({dealer.city})'
         context["reviews"] = get_dealer_reviews_from_cf(REVIEWS_API_URL, dealer_id)
         return render(request, 'djangoapp/dealer_details.html', context)
 
@@ -204,6 +208,7 @@ def add_review(request, dealer_id):
         elif request.method == 'POST': 
             review = dict()
             review['time'] = datetime.utcnow().isoformat()
+            review['purchase_date'] = request.POST.get("purchasedate", "")
             review['name'] = request.user.get_full_name()
             review['dealership'] = dealer_id
             review['review'] = request.POST.get("content", "I have got nothing to say...")
@@ -227,9 +232,7 @@ def add_review(request, dealer_id):
 
             response = post_request(REVIEWS_API_URL, json_payload)
             
-            print(response)
-
-            return redirect(reverse('dealer_details', args=[dealer_id]))
+            return redirect(reverse('djangoapp:dealer_details', args=[dealer_id]))
 
     return redirect('djangoapp:index')
 

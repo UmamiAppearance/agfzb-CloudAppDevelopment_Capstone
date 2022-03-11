@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ MEDIA_URL }}/css/styles.css">
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/styles.css">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
@@ -16,7 +16,7 @@
 
         <header class="container-fluid bg-warning pl-0">
             <h1 class="d-block w-75 bg-dark text-white m-0 py-1 pr-5 pl-1" style="font-size: 1.6em; border-radius: 0 10vw 0 0;">
-                Add a review about <strong>{{ dealer.full_name }} Dealership</strong>
+                Add a review about <strong>{{ dealer.full_name }}</strong>
             </h1>
         </header>
 
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="form-group" style="display: inline-flex; width: 100%; justify-content: space-between;">
-                        <label class="m-0" for="purchasecheck">Has purchased the car from {{ dealer.full_name }} Dealership?</label>
+                        <label class="m-0" for="purchasecheck">Has purchased the car from {{ dealer.full_name }}?</label>
                         <input class="form-control form-control-sm form-check-input my-auto mx-0 position-static" style="height: 2em; width: 2em; min-height: 2em; min-width: 2em;" type="checkbox" name="purchasecheck" id="purchasecheck">
                     </div>
                     
