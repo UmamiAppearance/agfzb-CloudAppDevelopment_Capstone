@@ -52,13 +52,3 @@ def main(dict):
             return compile_response('dealerId does not exist', 404) 
     
     return compile_response(response)
-
-
-if __name__ == '__main__':
-    d = {
-        'COUCH_URL': 'https://d7fb75d5-0085-4721-ad72-ac3a1019d658-bluemix.cloudantnosqldb.appdomain.cloud',
-        'IAM_API_KEY': 'f8UKMsnGanwfZHlncFtMjUtaUKcOmsRRmxb0g4Yf1GMY',
-        '__ow_method': 'post',
-        'dealerId': '15'        
-    }
-    print(main(d))
